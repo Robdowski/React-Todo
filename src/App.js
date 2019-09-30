@@ -2,26 +2,18 @@ import React from "react";
 import TodoList from "./components/TodoComponents/TodoList";
 import TodoForm from "./components/TodoComponents/TodoForm";
 import Todo from "./components/TodoComponents/Todo";
-import "./components/TodoComponents/Todo.css"
+import "./components/TodoComponents/Todo.css";
 
-const todoListData = [
-  {
-    task: "Take out garbage",
-    id: 123,
-    completed: false
-  },
-  {
-    task: "Buy groceries",
-    id: 1234,
-    completed: true
-  }
-];
+const todoListData = [];
+
+const searchData = ""
 
 class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      todo: todoListData
+      todo: todoListData,
+      search: searchData
     };
   }
 
@@ -37,7 +29,17 @@ class App extends React.Component {
         } else {
           return item;
         }
-      })
+      }),
+      search: this.state.search != "" || null ? this.state.search.map(item => {
+        if (item.id === id) {
+          return {
+            ...item,
+            completed: !item.completed
+          };
+        } else {
+          return item;
+        }
+      }) : ""
     });
   };
 
@@ -48,19 +50,30 @@ class App extends React.Component {
       completed: false
     };
     this.setState({
-      todo: [...this.state.todo, newItem]
+      todo: [...this.state.todo, newItem],
+      search: ""
     });
   };
 
   clearComplete = () => {
     this.setState({
-      todo: this.state.todo.filter(item => !item.completed)
+      todo: this.state.todo.filter(item => !item.completed),
+      search: this.state.search != "" || null ? this.state.search.filter(item => !item.completed) : ""
     });
   };
 
   clearAll = () => {
     this.setState({
-      todo: []
+      todo: todoListData,
+      search: ""
+    });
+  };
+
+  filterSearch = value => {
+    this.setState({
+      search: this.state.todo.length === 1 ? "" : this.state.todo.filter(item =>
+        item.task.toLowerCase().includes(value.toLowerCase())
+      )
     });
   };
 
@@ -72,12 +85,13 @@ class App extends React.Component {
       <div className="App">
         <div className="header">
           <h2>Robert's Todo List</h2>
-          <TodoForm addItem={this.addItem} />
+          <TodoForm addItem={this.addItem} filterSearch={this.filterSearch} />
           <TodoList
             toggleItem={this.toggleItem}
             clearComplete={this.clearComplete}
             clearAll={this.clearAll}
             todo={this.state.todo}
+            search={this.state.search}
           />
         </div>
       </div>

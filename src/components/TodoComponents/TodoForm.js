@@ -1,40 +1,55 @@
-import React from "react"
+import React from "react";
 
 class TodoForm extends React.Component {
-    constructor(){
-        super();
-        this.state = {
-            item: ''
-        };
-    }
+  constructor() {
+    super();
+    this.state = {
+      item: "",
+      search: ""
+    };
+  }
 
-    handleChanges = e => {
-        this.setState({
-            [e.target.name] : e.target.value
-        })
-    }
+  handleChanges = e => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
-    submitItem = e => {
-        e.preventDefault();
-        this.props.addItem(this.state.item);
-        this.setState({
-            item: ''
-        })
-    }
+  submitItem = e => {
+    e.preventDefault();
+    this.props.addItem(this.state.item);
+  };
 
-    render() {
-        return (
-            <form onSubmit={this.submitItem}>
-                <input
+  submitSearch = e => {
+      e.preventDefault();
+      this.props.filterSearch(this.state.search)
+  }
+
+  render() {
+    return (
+      <div className="form-container">
+        <form onSubmit={this.submitItem}>
+          <input
+            type="text"
+            value={this.item}
+            name="item"
+            onChange={this.handleChanges}
+          />
+          <button>Add Item</button>
+          <br />
+        </form>
+        <form className="search-form" onSubmit={this.submitSearch}>
+        <input
                 type="text"
-                value={this.item}
-                name="item"
+                value={this.search}
+                name="search"
                 onChange={this.handleChanges}
                 />
-                <button>Add Item</button>
-            </form>
-        )
-    }
+                <button>Search</button>
+        </form>
+      </div>
+    );
+  }
 }
 
-export default TodoForm
+export default TodoForm;
