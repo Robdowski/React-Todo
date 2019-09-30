@@ -6,7 +6,7 @@ import "./components/TodoComponents/Todo.css";
 
 const todoListData = [];
 
-const searchData = ""
+const searchData = "";
 
 class App extends React.Component {
   constructor() {
@@ -30,16 +30,19 @@ class App extends React.Component {
           return item;
         }
       }),
-      search: this.state.search != "" || null ? this.state.search.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            completed: !item.completed
-          };
-        } else {
-          return item;
-        }
-      }) : ""
+      search:
+        this.state.search != "" || null
+          ? this.state.search.map(item => {
+              if (item.id === id) {
+                return {
+                  ...item,
+                  completed: !item.completed
+                };
+              } else {
+                return item;
+              }
+            })
+          : ""
     });
   };
 
@@ -58,7 +61,10 @@ class App extends React.Component {
   clearComplete = () => {
     this.setState({
       todo: this.state.todo.filter(item => !item.completed),
-      search: this.state.search != "" || null ? this.state.search.filter(item => !item.completed) : ""
+      search:
+        this.state.search != "" || null
+          ? this.state.search.filter(item => !item.completed)
+          : ""
     });
   };
 
@@ -71,9 +77,12 @@ class App extends React.Component {
 
   filterSearch = value => {
     this.setState({
-      search: this.state.todo.length === 1 ? "" : this.state.todo.filter(item =>
-        item.task.toLowerCase().includes(value.toLowerCase())
-      )
+      search:
+        this.state.todo.length === 1
+          ? ""
+          : this.state.todo.filter(item =>
+              item.task.toLowerCase().includes(value.toLowerCase())
+            )
     });
   };
 
@@ -82,17 +91,18 @@ class App extends React.Component {
   // this component is going to take care of state, and any change handlers you need to work with your state
   render() {
     return (
-      <div className="App">
-        <div className="header">
-          <h2>Robert's Todo List</h2>
-          <TodoForm addItem={this.addItem} filterSearch={this.filterSearch} />
-          <TodoList
-            toggleItem={this.toggleItem}
-            clearComplete={this.clearComplete}
-            clearAll={this.clearAll}
-            todo={this.state.todo}
-            search={this.state.search}
-          />
+      <div className="App"><h1>Robert's Todo List</h1>
+        <div className="content">
+          <div className="todo-form">
+            <TodoForm addItem={this.addItem} filterSearch={this.filterSearch} />
+            <TodoList
+              toggleItem={this.toggleItem}
+              clearComplete={this.clearComplete}
+              clearAll={this.clearAll}
+              todo={this.state.todo}
+              search={this.state.search}
+            />
+          </div>
         </div>
       </div>
     );
